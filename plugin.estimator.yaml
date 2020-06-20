@@ -1,0 +1,15 @@
+#
+# Plug-in Identifier File
+#
+
+# this file serves as an identifier file for this plug-in, please keeo the suffix `.estimator.yaml` in the file name,
+#    as it is the keyword for Accelergy to locate this file
+
+# With the information provided in this file, Accelergy will search the directory and
+# locate the python module that implements the python-based estimation logic
+
+version: 0.1
+plug_in:                                       # A name for the plugin
+    module: plugin_wrapper                     # The Python module name, which actually is the name of the python file
+    class: PlugInWrapper                       # The class name inside the python wrapper file
+
