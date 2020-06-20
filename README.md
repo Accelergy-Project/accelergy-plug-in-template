@@ -1,14 +1,14 @@
 Plug-in Template for Constructing Accelergy Plug-ins
 --------------------------------------------------------
 
-Accelergy allows users to define their own plug-ins that performs estimations that
-are specific to the architectures under evaluation. We provide this plug-in template 
-as a starting point for the construction of a user-defined estimation that can interact 
+Accelergy allows users to define their own plug-ins that perform estimations
+ specific to the architectures under evaluation. We provide this plug-in template 
+as a starting point for the construction of a user-defined plug-in that can interact 
 Accelergy.
 
 ### How to use this template
 
-#### Step 1: let Accelergy be aware of this plug-in
+#### Step 1: make Accelergy aware of this plug-in
 
 - Option 1: modify the Accelergy config file (`~\.config\accelergy\accelergy_config.yaml`)
             to include the absolute path to this folder, 
@@ -22,7 +22,7 @@ Accelergy.
 Populate the interface functions provided inside `plugin_wrapper.py` to implement your logic for
 energy and area estimations. Detailed comments can be found in the files. 
 
-#### optional: modify the file names to reflect your plug-in's name
+#### Optional: modify the file names to reflect your plug-in's name
 
 
 
