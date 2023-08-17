@@ -17,89 +17,77 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+from accelergy.plug_in_interface.estimator_wrapper import (
+    AccelergyPlugIn,
+    AccelergyQuery,
+    AccuracyEstimation,
+    Estimation
+)
 
-#========================================================================
-PLUG_IN_ACCURACY = 0   # Please set the accuracy of your plug-in here
-#========================================================================
 
-class PlugInWrapper:
-    # an estimation plug-in wrapper class that implements the necessary interface functions for Accelergy-Plugin communications
+class PlugIn(AccelergyPlugIn):
+    """ 
+    Example plug-in for Accelergy. Extend me!
+    For logging within the plug-in, DO NOT use print statements. Instead, use
+    self.logger.info(), self.logger.warning(), self.logger.error(), etc.
+    """
 
-    # -------------------------------------------------------------------------------------
-    # Interface functions below,
-    #   function name, input arguments, and output format CANNOT be changed
-    # -------------------------------------------------------------------------------------
     def __init__(self):
+        super().__init__()
+        self.myvar = 5  # add any initialization here
 
-        """" initialize function that will be called inside Accelergy to instantiate the estimation plug-in"""
-        self.estimator_name =  "my_plug_in"  # please enter your plug-in's name here
+    def action_supported(self, query: AccelergyQuery) -> AccuracyEstimation:
+        """ 
+        Returns an AccuracyEstimation with the percent accuracy of the
+        plug-in's ability to estimate the action represented by the query.
+        Returns AccuracyEstimation(0) or raises an exception if the plug-in
+        cannot estimate the action.
+        """
+        class_name = query.class_name
+        attributes = query.attributes
+        action_name = query.action_name
+        arguments = query.arguments
+        self.logger.info('Accuracy check for %s %s', class_name, action_name)
+        accuracy_0_100 = 70
+        return AccuracyEstimation(accuracy_0_100)
 
-    def primitive_action_supported(self, interface):
-        """interface function for checking if a component action is supported by this plug-in"""
+    def estimate_energy(self, query: AccelergyQuery) -> Estimation:
+        """
+        Returns an Estimation with the energy of the action represented by the
+        query. Raises an exception if the plug-in cannot estimate the action.
+        """
+        class_name = query.class_name
+        attributes = query.attributes
+        action_name = query.action_name
+        arguments = query.arguments
+        self.logger.info('Estimating %s %s', class_name, action_name)
+        return Estimation(123, 'p')  # 123 pJ
 
-        # this function is called inside Accelergy as the initial check to see whether a component action is supported
+    def primitive_area_supported(self, query: AccelergyQuery) -> AccuracyEstimation:
+        """
+        Returns an AccuracyEstimation with the percent accuracy of the
+        plug-in's ability to estimate the area of the primitive represented by
+        the query. Returns AccuracyEstimation(0) or raises an exception if the
+        plug-in cannot estimate the area.
+        """
+        class_name = query.class_name
+        attributes = query.attributes
+        self.logger.info('Accuracy check for %s area', class_name)
+        accuracy_0_100 = 70
+        return AccuracyEstimation(accuracy_0_100)
 
-        # ================
-        # Input
-        # ================
-        # `interface` input is a dictionary that contains 4 keys:
-        # (1) class_name: the value for this key is a string that describes the name of the primitive component class
-        # (2) attributes: the value for this key is another dictionary that
-        #                 describes the attributes name-value pairs of the primitive component under evaluation
-        # (3) action_name: the value for this key is a string that describes the name of the primitive action under evaluation
-        # (4) arguments: the value for this key is another dictionary that
-        #                describes the arguments name-value pairs (if any) of the primitive action under evaluation
+    def estimate_area(self, query: AccelergyQuery) -> Estimation:
+        """
+        Returns an Estimation with the area of the primitive represented by the
+        query. Raises an exception if the plug-in cannot estimate the area.
+        """
+        class_name = query.class_name
+        attributes = query.attributes
+        self.logger.info('Estimating %s area', class_name)
+        return Estimation(123, 'u^2')  # 123 um^2
 
-
-        # ================
-        # Output
-        # ================
-        # If the plug-in suppor the specific request sent from Accelergy
-        #    this function should be the accuracy of the estimation plug-in,
-        # if not supported, please return 0
-
-        # example extractions of the information provided in the interface
-        class_name = interface['class_name']
-        attributes = interface['attributes']
-        action_name = interface['action_name']
-        arguments = interface['arguments']
-
-
-        return PLUG_IN_ACCURACY # if not supported, please return 0
-
-    def estimate_energy(self, interface):
-        """ Interface function for performing the actual energy estimations of the request sent from Accelergy"""
-
-        # this function will only be called if this plug-in is selected to be the most accurate plug-in by Accelergy,
-        # it should perform the energy estimation for the request
-
-        # ================
-        # Input
-        # ================
-        # `interface` input contains the same information as described in the `primitive_action_supported` function,
-        #     please refer back to the comments above
-
-        # ================
-        # Output
-        # ================
-        # please return the estimated energy
-        # note that this value will be rounded inside Accelergy,
-        #       default rounding is 3 decimal points, but precision can be set via the -d flag when running Accelergy
-
-        return 0.0
-
-    def primitive_area_supported(self, interface):
-        """interface function for checking if a component's area is supported by this plug-in"""
-
-        # input and output of this function format is the same as the `primitive_action_supported` function
-        # note that this is a check for area estimation instead of energy estimation;
-        #      if this plug-in does not support area estimation sof components, zero should be returned
-
-        return PLUG_IN_ACCURACY # if not supported, please return 0
-
-
-    def estimate_area(self, interface):
-        """ Interface function for performing the actual area estimations of the request sent from Accelergy"""
-        # input and output of this function is the same format as the `estimate_energy` function
-
-        return 0
+    def get_name(self) -> str:
+        """
+        Returns the name of the plug-in.
+        """
+        return "Example Plug-in"
