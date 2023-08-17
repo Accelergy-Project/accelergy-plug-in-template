@@ -44,9 +44,9 @@ class PlugIn(AccelergyPlugIn):
         cannot estimate the action.
         """
         class_name = query.class_name
-        attributes = query.attributes
+        attributes = query.class_attrs
         action_name = query.action_name
-        arguments = query.arguments
+        arguments = query.action_args
         self.logger.info('Accuracy check for %s %s', class_name, action_name)
         accuracy_0_100 = 70
         return AccuracyEstimation(accuracy_0_100)
@@ -57,9 +57,9 @@ class PlugIn(AccelergyPlugIn):
         query. Raises an exception if the plug-in cannot estimate the action.
         """
         class_name = query.class_name
-        attributes = query.attributes
+        attributes = query.class_attrs
         action_name = query.action_name
-        arguments = query.arguments
+        arguments = query.action_args
         self.logger.info('Estimating %s %s', class_name, action_name)
         return Estimation(123, 'p')  # 123 pJ
 
@@ -71,7 +71,7 @@ class PlugIn(AccelergyPlugIn):
         plug-in cannot estimate the area.
         """
         class_name = query.class_name
-        attributes = query.attributes
+        attributes = query.class_attrs
         self.logger.info('Accuracy check for %s area', class_name)
         accuracy_0_100 = 70
         return AccuracyEstimation(accuracy_0_100)
@@ -82,7 +82,7 @@ class PlugIn(AccelergyPlugIn):
         query. Raises an exception if the plug-in cannot estimate the area.
         """
         class_name = query.class_name
-        attributes = query.attributes
+        attributes = query.class_attrs
         self.logger.info('Estimating %s area', class_name)
         return Estimation(123, 'u^2')  # 123 um^2
 
